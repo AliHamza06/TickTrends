@@ -3,26 +3,29 @@ import { Button, IconButton } from '@mui/material';
 import AnalysisChart from './AnalysisChart';
 import AnalysisTable from './AnalysisTable';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { useLocation } from 'react-router-dom';
 
 export default function AnalysisHero() {
-    // States to manage visibility of extra filter options
     const [showAllSections, setShowAllSections] = useState(false);
     const [showAllQuantities, setShowAllQuantities] = useState(false);
-    const [showFilter, setShowFilter] = useState(false); // State to manage sideFilter visibility
+    const [showFilter, setShowFilter] = useState(false);
+
+    const location = useLocation();
+    const { event } = location.state;
 
     const toggleSections = () => setShowAllSections(prevState => !prevState);
     const toggleQuantities = () => setShowAllQuantities(prevState => !prevState);
-    const toggleFilter = () => setShowFilter(prevState => !prevState); // Toggle sideFilter visibility
+    const toggleFilter = () => setShowFilter(prevState => !prevState);
 
     return (
         <div className="container analysis-hero managewidth">
             <div className={`filterIcon ${showFilter ? 'active' : ''}`}>
                 <IconButton onClick={toggleFilter}>
-                    <FilterListIcon />
+                    <FilterListIcon /> 
                 </IconButton>
             </div>
             <div className="row">
-                {(showFilter || window.innerWidth > 1200) && ( // Conditionally render sideFilter
+                {(showFilter || window.innerWidth > 1200) && (
                     <div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 mt-0 sideFilter">
                         <div className="filter-container">
                             <div className="filter">
@@ -96,10 +99,10 @@ export default function AnalysisHero() {
                     </div>
                 )}
                 <div className={`col-xl-${showFilter ? '9' : '9'} col-lg-12 mt-xl-0 mt-0`}>
-                    <AnalysisChart />
+                    <AnalysisChart event={event} />
                 </div>
             </div>
-            <AnalysisTable />
+            <AnalysisTable/>
         </div>
     );
 }

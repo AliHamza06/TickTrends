@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchIcon from '../../assets/images/search-normal.svg';
 import SearchFilter from '../../assets/images/filter-search.svg';
 import { Button, Pagination, Stack } from '@mui/material';
@@ -23,8 +24,8 @@ const EventList = () => {
     const [error, setError] = useState(null);
 
     const itemsPerPage = 15;
+    const navigate = useNavigate();
 
-    // Fetch data with updated query
     const fetchData = useCallback(async (query = "") => {
         setLoading(true);
         setError(null);
@@ -42,15 +43,12 @@ const EventList = () => {
         }
     }, []);
 
-    // Use debounce to delay fetchData calls
     const debouncedFetchData = useCallback(debounce((query) => fetchData(query), 300), [fetchData]);
 
-    // Handle input change
     const handleInputChange = (e) => {
         setInput(e.target.value);
     };
 
-    // Trigger search when clicking the search icon or pressing Enter
     const handleSearchClick = () => {
         debouncedFetchData(input);
     };
@@ -65,7 +63,10 @@ const EventList = () => {
         }
     };
 
-    // Calculate pagination
+    const handleCardClick = (event) => {
+        navigate(`/analysis`, { state: { event } });
+    };
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentEvents = events.slice(indexOfFirstItem, indexOfLastItem);
@@ -100,7 +101,11 @@ const EventList = () => {
                         {error && <p>{error}</p>}
                         {currentEvents.length > 0 ? (
                             currentEvents.map(event => (
-                                <div key={event.id} className="event-item">
+                                <div 
+                                    key={event.id} 
+                                    className="event-item"
+                                    onClick={() => handleCardClick(event)}
+                                >
                                     <div className="event-date">
                                         <div className="event-month">{new Date(event.date_of_event).toLocaleString('default', { month: 'short' }) || 'N/A'}</div>
                                         <div className="event-day">{new Date(event.date_of_event).getDate() || 'N/A'}</div>

@@ -22,7 +22,7 @@ ChartJS.register(
     Legend
 );
 
-const AnalysisChart = () => {
+const AnalysisChart = ({ event }) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     useEffect(() => {
@@ -146,7 +146,6 @@ const AnalysisChart = () => {
                 labels: {
                     color: '#07070780 !important',
                     font: {
-                        // family: 'Helvetica',
                         size: isMobile ? 10 : 16,
                         weight: 500,
                     },
@@ -171,9 +170,9 @@ const AnalysisChart = () => {
     return (
         <div className='analysisChartSection'>
             <div className='swiftContent'>
-                <h2>Taylor Swift with Gracie Abrams</h2>
+                <h2>{event.event_name}</h2>
                 <p>
-                    <span><PinDropIcon /></span> Hard Rock Stadium in Miami Gardens, FL
+                    <span><PinDropIcon /></span> {event.venue_id}
                 </p>
             </div>
             <div className='chartContainer pt-3'>
