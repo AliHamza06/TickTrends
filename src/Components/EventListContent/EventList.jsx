@@ -125,7 +125,7 @@ const EventList = () => {
                                 </div>
                             ))
                         ) : (
-                            !loading && <p>No events found.</p>
+                            !loading && <div className='noDetail'> <p>No events found.</p></div>
                         )}
                     </>
                 )}

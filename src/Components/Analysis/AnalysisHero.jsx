@@ -3,7 +3,7 @@ import { Button, IconButton } from '@mui/material';
 import AnalysisChart from './AnalysisChart';
 import AnalysisTable from './AnalysisTable';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function AnalysisHero() {
     const [showAllSections, setShowAllSections] = useState(false);
@@ -11,7 +11,28 @@ export default function AnalysisHero() {
     const [showFilter, setShowFilter] = useState(false);
 
     const location = useLocation();
-    const { event } = location.state;
+    const navigate = useNavigate();
+
+    // Safely access event from location.state
+    const event = location.state?.event || null;
+
+    // Handle the case when event is not available
+    if (!event) {
+        return (
+            <div className="container analysis-hero managewidth noEvenTo">
+                <div className="row">
+                    <div className="col-12">
+                        <div className='noDetail'>
+                        <p>No event details available. Please go back to the search page to select an event.</p>
+                        <Button variant="contained" className='goToBtn' onClick={() => navigate('/search-area')}>
+                            Go to Search
+                        </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     const toggleSections = () => setShowAllSections(prevState => !prevState);
     const toggleQuantities = () => setShowAllQuantities(prevState => !prevState);
@@ -21,7 +42,7 @@ export default function AnalysisHero() {
         <div className="container analysis-hero managewidth">
             <div className={`filterIcon ${showFilter ? 'active' : ''}`}>
                 <IconButton onClick={toggleFilter}>
-                    <FilterListIcon /> 
+                    <FilterListIcon />
                 </IconButton>
             </div>
             <div className="row">
@@ -102,7 +123,7 @@ export default function AnalysisHero() {
                     <AnalysisChart event={event} />
                 </div>
             </div>
-            <AnalysisTable/>
+            <AnalysisTable />
         </div>
     );
 }

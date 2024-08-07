@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import PinDropIcon from '@mui/icons-material/PinDrop';
+import axios from 'axios';
+import ReactLoading from "https://cdn.skypack.dev/react-loading@2.0.3";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -22,8 +24,20 @@ ChartJS.register(
     Legend
 );
 
+const PreLoader1 = () => (
+    <ReactLoading
+        type={"bars"}
+        color={"#06A4FF"}
+        height={100}
+        width={100}
+        className="loaderSec"
+    />
+);
+
 const AnalysisChart = ({ event }) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [myarry, setMyarry] = useState({ graph_data: { get_in_price: [], event_supply: [], days_to_event: [] } });
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -31,19 +45,43 @@ const AnalysisChart = ({ event }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const postEventId = async (eventId) => {
+        setLoading(true);
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
+                event_id: eventId,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            setMyarry(response.data);
+        } catch (error) {
+            console.error('Error posting event ID:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (event && event.id) {
+            postEventId(event.id);
+        }
+    }, [event]);
+
     const data = {
-        labels: Array.from({ length: 22 }, (_, i) => 30 - i),
+        labels: myarry.graph_data?.days_to_event || Array.from({ length: 22 }, (_, i) => 30 - i),
         datasets: [
             {
                 label: 'Get In Price',
-                data: [500, 450, 470, 465, 455, 445, 435, 425, 420, 415, 410, 405, 400, 395, 390, 385, 380, 375, 370, 365, 360, 355],
+                data: myarry.graph_data?.get_in_price || [1400, 950, 1000, 850, 800, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50, 25, 0],
                 borderColor: '#06A4FF',
                 backgroundColor: 'rgba(0, 0, 255, 0.1)',
                 yAxisID: 'y',
             },
             {
                 label: 'Event Supply',
-                data: [1400, 950, 1000, 850, 800, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50, 25, 0],
+                data: myarry.graph_data?.event_supply || [1400, 950, 1000, 850, 800, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50, 25, 0],
                 borderColor: '#FA9600',
                 backgroundColor: 'rgba(255, 165, 0, 0.1)',
                 yAxisID: 'y1',
@@ -174,9 +212,16 @@ const AnalysisChart = ({ event }) => {
                 <p>
                     <span><PinDropIcon /></span> {event.venue_id}
                 </p>
+                {/* <button onClick={() => postEventId(event.id)}>Refresh Data</button> */}
             </div>
             <div className='chartContainer pt-3'>
-                <Line data={data} options={options} />
+                {loading ? (
+                    <div className="overlay">
+                        <PreLoader1 />
+                    </div>
+                ) : (
+                    <Line data={data} options={options} />
+                )}
             </div>
         </div>
     );
