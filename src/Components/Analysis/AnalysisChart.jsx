@@ -55,6 +55,9 @@ const AnalysisChart = ({ event }) => {
                     'Content-Type': 'application/json',
                 },
             });
+            if (response){
+                console.log(response.data, 'data')
+            }
             setMyarry(response.data);
         } catch (error) {
             console.error('Error posting event ID:', error);
@@ -69,19 +72,25 @@ const AnalysisChart = ({ event }) => {
         }
     }, [event]);
 
+    // Reverse only the days_to_event array
+    const reversedDaysToEvent = myarry.graph_data?.days_to_event.slice().reverse() || [];
+    const getInPrice = myarry.graph_data?.get_in_price || [];
+    const eventSupply = myarry.graph_data?.event_supply || [];
+
+    // Align data with reversed days_to_event
     const data = {
-        labels: myarry.graph_data?.days_to_event || Array.from({ length: 22 }, (_, i) => 30 - i),
+        labels: reversedDaysToEvent,
         datasets: [
             {
                 label: 'Get In Price',
-                data: myarry.graph_data?.get_in_price || [1400, 950, 1000, 850, 800, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50, 25, 0],
+                data: getInPrice,
                 borderColor: '#06A4FF',
                 backgroundColor: 'rgba(0, 0, 255, 0.1)',
                 yAxisID: 'y',
             },
             {
                 label: 'Event Supply',
-                data: myarry.graph_data?.event_supply || [1400, 950, 1000, 850, 800, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50, 25, 0],
+                data: eventSupply,
                 borderColor: '#FA9600',
                 backgroundColor: 'rgba(255, 165, 0, 0.1)',
                 yAxisID: 'y1',
@@ -210,7 +219,7 @@ const AnalysisChart = ({ event }) => {
             <div className='swiftContent'>
                 <h2>{event.event_name}</h2>
                 <p>
-                    <span><PinDropIcon /></span> {event.venue_id}
+                    <span><PinDropIcon /></span> {myarry.event?.address || 'Address not available'}
                 </p>
                 {/* <button onClick={() => postEventId(event.id)}>Refresh Data</button> */}
             </div>
