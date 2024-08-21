@@ -22,6 +22,7 @@ const EventList = () => {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    
 
     const itemsPerPage = 15;
     const navigate = useNavigate();
@@ -35,6 +36,9 @@ const EventList = () => {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
+            if (data){
+                console.log(data,'data is here')
+            }
             setEvents(data.events || []);
         } catch (error) {
             setError('Error fetching data. Please try again later.');
@@ -100,33 +104,33 @@ const EventList = () => {
                     <>
                         {error && <p>{error}</p>}
                         {currentEvents.length > 0 ? (
-                            currentEvents.map(event => (
-                                <div 
-                                    key={event.id} 
-                                    className="event-item"
-                                    onClick={() => handleCardClick(event)}
-                                >
-                                    <div className="event-date">
-                                        <div className="event-month">{new Date(event.date_of_event).toLocaleString('default', { month: 'short' }) || 'N/A'}</div>
-                                        <div className="event-day">{new Date(event.date_of_event).getDate() || 'N/A'}</div>
-                                    </div>
-                                    <div className="event-details">
-                                        <div className='available-title'>{event.available || 'Available'}</div>
-                                        <div className="event-title">{event.event_name}</div>
-                                        <div className="event-venue">
-                                            <span>Time : {event.time}</span> |
-                                            <span>Artist : {event.artist_id}</span>
-                                            <span>Venue ID : {event.venue_id}</span>
-                                        </div>
-                                    </div>
-                                    <div className="event-price">
-                                        <Button variant='outlined' className="price-button">From {event.price || '$0'}</Button>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            !loading && <div className='noDetail'> <p>No events found.</p></div>
-                        )}
+    currentEvents.map(event => (
+        <div 
+            key={event.id} 
+            className="event-item"
+            onClick={() => handleCardClick(event)}
+        >
+            <div className="event-date">
+                <div className="event-month">{new Date(event.date_of_event).toLocaleString('default', { month: 'short' }) || 'N/A'}</div>
+                <div className="event-day">{new Date(event.date_of_event).getDate() || 'N/A'}</div>
+            </div>
+            <div className="event-details">
+                <div className='available-title'>{event.available || 'Available'}</div>
+                <div className="event-title">{event.event_name}</div>
+                <div className="event-venue">
+                    <span>Time : {event.date_of_event.split('T')[1]}</span> |
+                    <span>Artist : {event.artist_name}</span> |
+                    <span>Venue : {event.venue_name}</span>
+                </div>
+            </div>
+            <div className="event-price">
+                <Button variant='outlined' className="price-button">From {event.price || '$0'}</Button>
+            </div>
+        </div>
+    ))
+) : (
+    !loading && <div className='noDetail'> <p>No events found.</p></div>
+)}
                     </>
                 )}
             </div>

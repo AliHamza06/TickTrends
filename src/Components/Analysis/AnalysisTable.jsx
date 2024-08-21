@@ -1,19 +1,33 @@
 import React from 'react';
 
-const data = [
-    {
-        label: 'Change in Get in Price',
-        quantity : '(Quantity 3, Section 122)',
-        values: ['$7.40', '($1.50)', '($3.70)', '$4.50', '$4.50']
-    },
-    {
-        label: 'Change in Supply',
-        quantity : '(Quantity 3, Section 122)',
-        values: ['-100.00', '-200.00', '-600.00', '-1,100.00', '-1,100.00']
-    }
-];
+const AnalysisTable = ({ supplyChanges, priceChanges ,sectionsapi ,quantities }) => {
 
-const AnalysisTable = () => {
+    console.log(priceChanges,'priceChanges')
+    const data = [
+        {
+            label: 'Change in Get in Price',
+            quantity: `(Quantity ${quantities? quantities : "2"}, ${sectionsapi})`,
+            values: [
+                priceChanges?.last_3_days?.value || "$0.00",
+                priceChanges?.last_7_days?.value || "$0.00",
+                priceChanges?.last_14_days?.value || "$0.00",
+                priceChanges?.last_30_days?.value || "$0.00",
+                priceChanges?.since_created?.value || "$0.00"
+            ]
+        },
+        {
+            label: 'Change in Supply',
+            quantity: `(Quantity ${quantities? quantities : "2"}, ${sectionsapi})`,
+            values: [
+                supplyChanges?.last_3_days?.value || "$0.00",
+                supplyChanges?.last_7_days?.value || "$0.00",
+                supplyChanges?.last_14_days?.value || "$0.00",
+                supplyChanges?.last_30_days?.value || "$0.00",
+                supplyChanges?.since_created?.value || "$0.00"
+            ]
+        }
+    ];
+
     return (
         <div className="table-wrapper">
             <table className="table summary-table summary-table2">
@@ -31,13 +45,13 @@ const AnalysisTable = () => {
                 <tbody className='tbodyRow'>
                     {data.map((row, index) => (
                         <tr key={index}>
-                            <td className='labelTd'>{row.label} </td>
-                            <td className='labelTd'><span className='quantitySpan'>{row.quantity}</span> </td>
-                            {row.values.map((value, idx) => (
+                            <td className='labelTd'>{row.label}</td>
+                            <td className='labelTd'><span className='quantitySpan'>{row.quantity}</span></td>
+                            {row?.values?.map((value, idx) => (
                                 <td
                                     key={idx}
                                     className={
-                                        value.includes('($') || value.includes('-') ? 'red-text' : 'green-text'
+                                        value?.includes('($') || value?.includes('-') ? 'red-text' : 'green-text'
                                     }
                                 >
                                     {value}

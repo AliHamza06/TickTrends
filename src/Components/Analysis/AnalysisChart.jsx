@@ -34,7 +34,7 @@ const PreLoader1 = () => (
     />
 );
 
-const AnalysisChart = ({ event }) => {
+const AnalysisChart = ({ event,sections,setSections,sectionsapi,quantities,setCallApi,callApi,setSupplyChanges,setPriceChanges}) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
     const [myarry, setMyarry] = useState({ graph_data: { get_in_price: [], event_supply: [], days_to_event: [] } });
     const [loading, setLoading] = useState(false);
@@ -47,30 +47,41 @@ const AnalysisChart = ({ event }) => {
 
     const postEventId = async (eventId) => {
         setLoading(true);
+        console.log(eventId, 'event', sectionsapi, quantities);
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
                 event_id: eventId,
+                ticket_quantity: quantities,
+                sections: sectionsapi,
             }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            if (response){
-                console.log(response.data, 'data')
+            if (response) {
+                console.log(response.data, 'data');
             }
             setMyarry(response.data);
+            setSections(response.data.available_sections || []);
+            setSupplyChanges(response.data.supply_changes || []);
+            setPriceChanges(response.data.price_changes || []);
+
         } catch (error) {
             console.error('Error posting event ID:', error);
         } finally {
             setLoading(false);
+            setCallApi(false); // This ensures that the API call flag is reset after the call completes
         }
     };
+    
 
     useEffect(() => {
-        if (event && event.id) {
+        if (event && event.id && callApi === true) {
+            console.log('we are in update filter');
             postEventId(event.id);
         }
-    }, [event]);
+    }, [event, callApi]);
+    
 
     // Reverse only the days_to_event array
     const reversedDaysToEvent = myarry.graph_data?.days_to_event.slice().reverse() || [];

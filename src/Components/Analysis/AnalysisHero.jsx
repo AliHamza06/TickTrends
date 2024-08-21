@@ -11,51 +11,58 @@ export default function AnalysisHero() {
     const [showAllQuantities, setShowAllQuantities] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
     const [sections, setSections] = useState([]);
+    const [sectionsapi, setSectionsapi] = useState([]);
+    const [callApi,setCallApi] = useState(true)
     const [quantities, setQuantities] = useState(['2']);
+    const [supplyChanges,setSupplyChanges] = useState([])
+    const [priceChanges,setPriceChanges] = useState([])
+
 
     const location = useLocation();
     const navigate = useNavigate();
     const event = location.state?.event || null;
 
-    useEffect(() => {
-        if (event && event.id) {
-            axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
-                event_id: event.id,
+    // useEffect(() => {
+    //     if (event && event.id) {
+    //         axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
+    //             event_id: event.id,
 
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(response => {
-                    setSections(response.data.available_sections || []);
-                })
-                .catch(error => {
-                    console.error('Error fetching sections:', error);
-                });
-        }
-    }, [event]);
+    //         }, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         })
+    //             .then(response => {
+    //                 setSections(response.data.available_sections || []);
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error fetching sections:', error);
+    //             });
+    //     }
+    // }, [event]);
 
-    const updateFilter = async () => {
-        if (quantities) {
-            axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
-                event_id: event.id,
-                ticket_quantity: quantities
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then(response => {
-                    console.log(response.data, 'ere APPLICATION');
-                    setSections(response.data.available_sections || []);
-                })
-                .catch(error => {
-                    console.error('Error fetching sections:', error);
-                });
-        }
-        // console.log(quantities, 'state')
-    };
+    // const updateFilter = async () => {
+    //     console.log(quantities,'quantities', sectionsapi,'sections')
+    //     if (quantities,sections) {
+    //         axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
+    //             event_id: event.id,
+    //             ticket_quantity: quantities,
+    //             sections : sections
+    //         }, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         })
+    //             .then(response => {
+    //                 console.log(response.data, 'ere APPLICATION');
+    //                 setSections(response.data.available_sections || []);
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error fetching sections:', error);
+    //             });
+    //     }
+    //     console.log(quantities, 'state')
+    // };
 
     const handleQuantityChange = (e) => {
         const value = e.target.value;
@@ -64,6 +71,17 @@ export default function AnalysisHero() {
                 ? prevQuantities.filter(q => q !== value) // Remove if already selected
                 : [...prevQuantities, value] // Add if not selected
         );
+    };
+
+    const handlesectionsChange = (e) => {
+        console.log(e,'e')
+        const value = e.target.value;
+        setSectionsapi(prevSectionsapi =>
+            prevSectionsapi.includes(value)
+                ? prevSectionsapi.filter(q => q !== value) // Remove if already selected
+                : [...prevSectionsapi, value] // Add if not selected
+        );
+        console.log(sectionsapi,'sss')
     };
 
     if (!event) {
@@ -102,7 +120,14 @@ export default function AnalysisHero() {
                                 <h4>Filter by Section</h4>
                                 {sections.slice(0, showAllSections ? sections.length : 3).map((section, index) => (
                                     <div className="checkGroup" key={index}>
-                                        <input id={`section-${index}`} className='form-check-input' type="checkbox" name="section" value={section.section} />
+                                        <input id={`section-${index}`} 
+                                        className='form-check-input' 
+                                        type="checkbox" 
+                                        name="section" 
+                                        value={section.section} 
+                                        checked={sectionsapi.includes(section.section)}
+                                        onChange={handlesectionsChange}
+                                        />
                                         <label htmlFor={`section-${index}`}>{section.section}</label>
                                     </div>
                                 ))}
@@ -197,16 +222,16 @@ export default function AnalysisHero() {
                                 >
                                     {showAllQuantities ? 'See Less' : 'See More'}
                                 </Button>
-                                <Button variant='contained' className="apply-filter-btn" onClick={updateFilter}>Apply Filter</Button>
+                                <Button variant='contained' className="apply-filter-btn" onClick={()=>{setCallApi(true)}}>Apply Filter</Button>
                             </div>
                         </div>
                     </div>
                 )}
                 <div className={`col-xl-${showFilter ? '9' : '9'} col-lg-12 mt-xl-0 mt-0`}>
-                    <AnalysisChart event={event} sections={sections} />
+                    <AnalysisChart event={event} sections={sections} setSections={setSections} sectionsapi={sectionsapi} setSectionsapi={setSectionsapi} quantities={quantities} setQuantities={setQuantities} setCallApi={setCallApi} callApi={callApi} setSupplyChanges={setSupplyChanges}   setPriceChanges={setPriceChanges}/>
                 </div>
             </div>
-            <AnalysisTable />
+            <AnalysisTable supplyChanges={supplyChanges} priceChanges={priceChanges} sectionsapi={sectionsapi} quantities={quantities}/>
         </div>
     );
 }
