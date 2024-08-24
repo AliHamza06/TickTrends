@@ -232,7 +232,6 @@ const AnalysisChart = ({ event,sections,setSections,sectionsapi,quantities,setCa
                 <p>
                     <span><PinDropIcon /></span> {myarry.event?.address || 'Address not available'}
                 </p>
-                {/* <button onClick={() => postEventId(event.id)}>Refresh Data</button> */}
             </div>
             <div className='chartContainer pt-3'>
                 {loading ? (

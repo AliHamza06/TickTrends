@@ -11,78 +11,50 @@ export default function AnalysisHero() {
     const [showAllQuantities, setShowAllQuantities] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
     const [sections, setSections] = useState([]);
+    const [tempSectionsapi, setTempSectionsapi] = useState([]);
+    const [tempQuantities, setTempQuantities] = useState(['2']);
     const [sectionsapi, setSectionsapi] = useState([]);
-    const [callApi,setCallApi] = useState(true)
     const [quantities, setQuantities] = useState(['2']);
-    const [supplyChanges,setSupplyChanges] = useState([])
-    const [priceChanges,setPriceChanges] = useState([])
-
+    const [callApi, setCallApi] = useState(true);
+    const [supplyChanges, setSupplyChanges] = useState([]);
+    const [priceChanges, setPriceChanges] = useState([]);
 
     const location = useLocation();
     const navigate = useNavigate();
     const event = location.state?.event || null;
 
-    // useEffect(() => {
-    //     if (event && event.id) {
-    //         axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
-    //             event_id: event.id,
-
-    //         }, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         })
-    //             .then(response => {
-    //                 setSections(response.data.available_sections || []);
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error fetching sections:', error);
-    //             });
-    //     }
-    // }, [event]);
-
-    // const updateFilter = async () => {
-    //     console.log(quantities,'quantities', sectionsapi,'sections')
-    //     if (quantities,sections) {
-    //         axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
-    //             event_id: event.id,
-    //             ticket_quantity: quantities,
-    //             sections : sections
-    //         }, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         })
-    //             .then(response => {
-    //                 console.log(response.data, 'ere APPLICATION');
-    //                 setSections(response.data.available_sections || []);
-    //             })
-    //             .catch(error => {
-    //                 console.error('Error fetching sections:', error);
-    //             });
-    //     }
-    //     console.log(quantities, 'state')
-    // };
-
     const handleQuantityChange = (e) => {
         const value = e.target.value;
-        setQuantities(prevQuantities =>
+        setTempQuantities(prevQuantities =>
             prevQuantities.includes(value)
                 ? prevQuantities.filter(q => q !== value) // Remove if already selected
                 : [...prevQuantities, value] // Add if not selected
         );
     };
 
-    const handlesectionsChange = (e) => {
-        console.log(e,'e')
+    const handleSectionsChange = (e) => {
         const value = e.target.value;
-        setSectionsapi(prevSectionsapi =>
+        setTempSectionsapi(prevSectionsapi =>
             prevSectionsapi.includes(value)
                 ? prevSectionsapi.filter(q => q !== value) // Remove if already selected
                 : [...prevSectionsapi, value] // Add if not selected
         );
-        console.log(sectionsapi,'sss')
     };
+
+    const applyFilter = () => {
+        setCallApi(true);
+        setQuantities(tempQuantities);
+        setSectionsapi(tempSectionsapi);
+    };
+
+    useEffect(() => {
+        if (callApi) {
+            // Example: Make an API call to get data based on filters
+            console.log("Applying filters:", sectionsapi, quantities);
+            // Reset callApi flag after API call
+            setCallApi(true);
+        }
+    }, [callApi, sectionsapi, quantities]);
 
     if (!event) {
         return (
@@ -120,13 +92,14 @@ export default function AnalysisHero() {
                                 <h4>Filter by Section</h4>
                                 {sections.slice(0, showAllSections ? sections.length : 3).map((section, index) => (
                                     <div className="checkGroup" key={index}>
-                                        <input id={`section-${index}`} 
-                                        className='form-check-input' 
-                                        type="checkbox" 
-                                        name="section" 
-                                        value={section.section} 
-                                        checked={sectionsapi.includes(section.section)}
-                                        onChange={handlesectionsChange}
+                                        <input
+                                            id={`section-${index}`}
+                                            className='form-check-input'
+                                            type="checkbox"
+                                            name="section"
+                                            value={section.section}
+                                            checked={tempSectionsapi.includes(section.section)}
+                                            onChange={handleSectionsChange}
                                         />
                                         <label htmlFor={`section-${index}`}>{section.section}</label>
                                     </div>
@@ -147,7 +120,7 @@ export default function AnalysisHero() {
                                         type="checkbox"
                                         name="quantity"
                                         value="1"
-                                        checked={quantities.includes('1')}
+                                        checked={tempQuantities.includes('1')}
                                         onChange={handleQuantityChange}
                                     />
                                     <label htmlFor="quantity1">1 Ticket</label>
@@ -159,7 +132,7 @@ export default function AnalysisHero() {
                                         type="checkbox"
                                         name="quantity"
                                         value="2"
-                                        checked={quantities.includes('2')}
+                                        checked={tempQuantities.includes('2')}
                                         onChange={handleQuantityChange}
                                     />
                                     <label htmlFor="quantity2">2 Tickets</label>
@@ -171,7 +144,7 @@ export default function AnalysisHero() {
                                         type="checkbox"
                                         name="quantity"
                                         value="3"
-                                        checked={quantities.includes('3')}
+                                        checked={tempQuantities.includes('3')}
                                         onChange={handleQuantityChange}
                                     />
                                     <label htmlFor="quantity3">3 Tickets</label>
@@ -183,7 +156,7 @@ export default function AnalysisHero() {
                                         type="checkbox"
                                         name="quantity"
                                         value="4"
-                                        checked={quantities.includes('4')}
+                                        checked={tempQuantities.includes('4')}
                                         onChange={handleQuantityChange}
                                     />
                                     <label htmlFor="quantity4">4 Tickets</label>
@@ -195,7 +168,7 @@ export default function AnalysisHero() {
                                         type="checkbox"
                                         name="quantity"
                                         value="5"
-                                        checked={quantities.includes('5')}
+                                        checked={tempQuantities.includes('5')}
                                         onChange={handleQuantityChange}
                                     />
                                     <label htmlFor="quantity5">5 Tickets</label>
@@ -208,7 +181,7 @@ export default function AnalysisHero() {
                                             type="checkbox"
                                             name="quantity"
                                             value="6"
-                                            checked={quantities.includes('6')}
+                                            checked={tempQuantities.includes('6')}
                                             onChange={handleQuantityChange}
                                         />
                                         <label htmlFor="quantity6">6 Tickets</label>
@@ -222,13 +195,13 @@ export default function AnalysisHero() {
                                 >
                                     {showAllQuantities ? 'See Less' : 'See More'}
                                 </Button>
-                                <Button variant='contained' className="apply-filter-btn" onClick={()=>{setCallApi(true)}}>Apply Filter</Button>
+                                <Button variant='contained' className="apply-filter-btn" onClick={applyFilter}>Apply Filter</Button>
                             </div>
                         </div>
                     </div>
                 )}
                 <div className={`col-xl-${showFilter ? '9' : '9'} col-lg-12 mt-xl-0 mt-0`}>
-                    <AnalysisChart event={event} sections={sections} setSections={setSections} sectionsapi={sectionsapi} setSectionsapi={setSectionsapi} quantities={quantities} setQuantities={setQuantities} setCallApi={setCallApi} callApi={callApi} setSupplyChanges={setSupplyChanges}   setPriceChanges={setPriceChanges}/>
+                    <AnalysisChart event={event} sections={sections} setSections={setSections} sectionsapi={sectionsapi} setSectionsapi={setSectionsapi} quantities={quantities} setQuantities={setQuantities} setCallApi={setCallApi} callApi={callApi} setSupplyChanges={setSupplyChanges} setPriceChanges={setPriceChanges}/>
                 </div>
             </div>
             <AnalysisTable supplyChanges={supplyChanges} priceChanges={priceChanges} sectionsapi={sectionsapi} quantities={quantities}/>
