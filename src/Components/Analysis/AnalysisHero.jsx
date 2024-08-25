@@ -47,14 +47,14 @@ export default function AnalysisHero() {
         setSectionsapi(tempSectionsapi);
     };
 
-    useEffect(() => {
-        if (callApi) {
-            // Example: Make an API call to get data based on filters
-            console.log("Applying filters:", sectionsapi, quantities);
-            // Reset callApi flag after API call
-            setCallApi(true);
-        }
-    }, [callApi, sectionsapi, quantities]);
+    // useEffect(() => {
+    //     if (callApi) {
+    //         // Example: Make an API call to get data based on filters
+    //         console.log("Applying filters:", sectionsapi, quantities);
+    //         // Reset callApi flag after API call
+    //         setCallApi(true);
+    //     }
+    // }, [callApi, sectionsapi, quantities]);
 
     if (!event) {
         return (

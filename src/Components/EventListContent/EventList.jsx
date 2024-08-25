@@ -31,7 +31,7 @@ const EventList = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/search-all/?q=${query}`);
+            const response = await fetch(`https://api.tictrends.com/api/search-all/?q=${query}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -124,7 +124,7 @@ const EventList = () => {
                 </div>
             </div>
             <div className="event-price">
-                <Button variant='outlined' className="price-button">From {event.price || '$0'}</Button>
+                <Button variant='outlined' className="price-button">From ${event.min_price || '$0'}</Button>
             </div>
         </div>
     ))
