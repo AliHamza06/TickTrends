@@ -124,7 +124,7 @@ const EventList = () => {
                 </div>
             </div>
             <div className="event-price">
-                <Button variant='outlined' className="price-button">From ${event.min_price || '$0'}</Button>
+                <Button variant='outlined' className="price-button">More ></Button>
             </div>
         </div>
     ))
