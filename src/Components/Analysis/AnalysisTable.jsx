@@ -27,6 +27,7 @@ const AnalysisTable = ({ supplyChanges, priceChanges ,sectionsapi ,quantities })
             ]
         }
     ];
+    
 
     return (
         <div className="table-wrapper">

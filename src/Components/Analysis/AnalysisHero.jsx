@@ -42,10 +42,11 @@ export default function AnalysisHero() {
     };
 
     const applyFilter = () => {
-        setCallApi(true);
-        setQuantities(tempQuantities);
-        setSectionsapi(tempSectionsapi);
+        setCallApi(true); // Trigger the API call
+        setQuantities(tempQuantities); // Apply selected quantities
+        setSectionsapi(tempSectionsapi); // Apply selected sections
     };
+    
 
     // useEffect(() => {
     //     if (callApi) {

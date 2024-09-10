@@ -939,26 +939,30 @@ body::-webkit-scrollbar-thumb {
 .event-month {
     background-color: #06A4FF;
     color: #fff;
-    padding: 8px;
+    padding: 6px 7px;
     border-radius: 5px 5px 0 0;
     font-family: 'Helvetica';
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     line-height: 21.47px;
     text-align: center;
 
 }
-
+.eventYear{
+    border-radius: 0px 0px 5px 5px !important;
+    font-size: 14px !important;
+    padding: 2px 8px !important;
+}
 .chartLabel {
     color: #06A4FF !important;
 }
 
 .event-day {
     background-color: #f0f0f0;
-    padding: 10px;
+    padding: 5px 8px;
     border-radius: 0 0 5px 5px;
     font-family: 'Helvetica';
-    font-size: 45px;
+    font-size: 40px;
     font-weight: 400;
     line-height: 50.26px;
     text-align: center;
@@ -1090,8 +1094,12 @@ body::-webkit-scrollbar-thumb {
     border-radius: 16px;
     border: 1.5px solid #F2F2F2;
     padding: 22px 25px 25px 25px;
+    height: calc(100vh - 491px);
+    overflow-y: auto;
 }
-
+.filter-container::-webkit-scrollbar{
+    width: 0;
+}
 .filter h4 {
     margin-bottom: 15px;
     font-family: 'Helvetica';
@@ -1272,6 +1280,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 1400px) {
+    .filter-container {
+        height: calc(100vh - 559px);
+    }
     .seeMoreBtn {
         font-size: 16px;
         line-height: 21.47px;
@@ -1299,6 +1310,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 1200px) {
+    .filter-container {
+        height: calc(100vh - 521px);
+    }
     .sideFilter {
         position: absolute;
         left: 0;
@@ -1367,6 +1381,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 992px) {
+    .filter-container {
+        height: calc(100vh - 627px);
+    }
     .filter-container {
         width: 100%;
         max-width: 230px;
@@ -1498,6 +1515,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 768px) {
+    .analysisChartSection {
+        padding: 12px;
+    }
     .event-item {
         flex-direction: column;
         align-items: start;
