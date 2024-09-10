@@ -1094,7 +1094,7 @@ body::-webkit-scrollbar-thumb {
     border-radius: 16px;
     border: 1.5px solid #F2F2F2;
     padding: 22px 25px 25px 25px;
-    height: calc(100vh - 491px);
+    height: 100vh;
     overflow-y: auto;
 }
 .filter-container::-webkit-scrollbar{
@@ -1191,6 +1191,7 @@ body::-webkit-scrollbar-thumb {
     background-color: #FFFFFF;
     border-radius: 16px;
     padding: 32px;
+    height: 100vh;
 }
 
 .quantitySpan {
@@ -1280,9 +1281,12 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 1400px) {
-    .filter-container {
-        height: calc(100vh - 559px);
+    .analysisChartSection {
+        height: auto;
     }
+    /* .filter-container {
+        height: 100vh;
+    } */
     .seeMoreBtn {
         font-size: 16px;
         line-height: 21.47px;
@@ -1310,13 +1314,14 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 1200px) {
-    .filter-container {
+    /* .filter-container {
         height: calc(100vh - 521px);
-    }
+    } */
     .sideFilter {
         position: absolute;
         left: 0;
         top: 0;
+        z-index: 9;
     }
 
     .filterIcon {
@@ -1381,9 +1386,9 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 992px) {
-    .filter-container {
+    /* .filter-container {
         height: calc(100vh - 627px);
-    }
+    } */
     .filter-container {
         width: 100%;
         max-width: 230px;
