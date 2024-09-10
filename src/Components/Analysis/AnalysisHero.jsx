@@ -91,6 +91,7 @@ export default function AnalysisHero() {
                         <div className="filter-container">
                             <div className="filter">
                                 <h4>Filter by Section</h4>
+                                <div className='filterSection'>
                                 {sections.slice(0, showAllSections ? sections.length : 3).map((section, index) => (
                                     <div className="checkGroup" key={index}>
                                         <input
@@ -113,7 +114,9 @@ export default function AnalysisHero() {
                                 >
                                     {showAllSections ? 'See Less' : 'See More'}
                                 </Button>
+                                </div>
                                 <h4 className='pt-3 pb-1'>Filter by Quantity</h4>
+                                <div className='filterQuantity'>
                                 <div className="checkGroup">
                                     <input
                                         id="quantity1"
@@ -196,7 +199,10 @@ export default function AnalysisHero() {
                                 >
                                     {showAllQuantities ? 'See Less' : 'See More'}
                                 </Button>
+                                </div>
+                                <div className='d-flex'>
                                 <Button variant='contained' className="apply-filter-btn" onClick={applyFilter}>Apply Filter</Button>
+                                </div>
                             </div>
                         </div>
                     </div>

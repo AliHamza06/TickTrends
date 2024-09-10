@@ -1093,22 +1093,47 @@ body::-webkit-scrollbar-thumb {
     background-color: #FFFFFF;
     border-radius: 16px;
     border: 1.5px solid #F2F2F2;
-    padding: 22px 25px 25px 25px;
-    height: 100vh;
-    overflow-y: auto;
+    padding: 22px 0px 20px 0px;
+    
+    
 }
-.filter-container::-webkit-scrollbar{
-    width: 0;
+.filterSection::-webkit-scrollbar{
+    width: 6px;
+	background-color: #F5F5F5;
 }
+.filterQuantity::-webkit-scrollbar{
+    width: 6px;
+	background-color: #F5F5F5;
+}
+.filterSection::-webkit-scrollbar-thumb,
+.filterQuantity::-webkit-scrollbar-thumb
+{
+    background-color: #06A4FF;
+}
+/* .filter{
+    height: calc(100vh - 228px);
+} */
 .filter h4 {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-family: 'Helvetica';
     font-size: 20px;
     font-weight: 500;
     line-height: 24px;
     color: #070707;
-}
+    padding: 0 25px 0 25px;
 
+}
+.filterSection{
+    height: 168px;
+    overflow-y: auto;
+    padding: 0 25px 0 25px;
+
+}
+.filterQuantity{
+    height: 259px;
+    overflow-y: auto;
+    padding: 0 25px 0 25px;
+}
 .checkGroup {
     display: flex;
     gap: 12px;
@@ -1167,7 +1192,9 @@ body::-webkit-scrollbar-thumb {
     line-height: 16.7px !important;
     text-transform: capitalize !important;
     width: 100% !important;
-    margin-top: 24px !important;
+    max-width: 270px;
+    margin: 0 auto !important;
+    margin-top: 20px !important;
 }
 
 .apply-filter-btn:hover {
@@ -1191,7 +1218,7 @@ body::-webkit-scrollbar-thumb {
     background-color: #FFFFFF;
     border-radius: 16px;
     padding: 32px;
-    height: 100vh;
+    /* height: 100vh; */
 }
 
 .quantitySpan {
@@ -1258,7 +1285,13 @@ body::-webkit-scrollbar-thumb {
     align-items: center;
     justify-content: center;
 }
+/* @media (max-width : 1600px) {
+    .filter{
+        height: calc(100vh - 140px);
+    }
+} */
 @media (min-width : 1440px) {
+    
     .price-btn {
         padding: 5px 6px !important;
         font-size: 10px !important;
@@ -1281,6 +1314,15 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 1400px) {
+    .filterQuantity {
+        height: 219px;
+    }
+    .filterSection {
+        height: 145px;
+    }
+    .apply-filter-btn {
+        max-width: 228px;
+    }
     .analysisChartSection {
         height: auto;
     }
@@ -1314,6 +1356,12 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 1200px) {
+    .apply-filter-btn {
+        max-width: 190px;
+    }
+    .filterSection {
+        height: 167px;
+    }
     /* .filter-container {
         height: calc(100vh - 521px);
     } */
@@ -1386,6 +1434,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 992px) {
+    
     /* .filter-container {
         height: calc(100vh - 627px);
     } */
@@ -1624,10 +1673,26 @@ body::-webkit-scrollbar-thumb {
 }
 
 @media (max-width : 576px) {
-    .filter-container {
-        padding: 15px 15px 20px 15px;
+    .apply-filter-btn {
+        max-width: 200px;
     }
-
+    .filter-container {
+        padding: 15px 0px 20px 0px;
+    }
+    .filterSection{
+        height: 145px;
+        overflow-y: auto;
+        padding: 0 15px 0 15px;
+    
+    }
+    .filter h4{
+        padding: 0 15px 0 15px;
+    }
+    .filterQuantity{
+        height: 210px;
+        overflow-y: auto;
+        padding: 0 15px 0 15px;
+    }
     .analysisChartSection {
         padding: 16px;
     }
