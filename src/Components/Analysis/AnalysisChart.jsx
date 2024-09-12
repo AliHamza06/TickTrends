@@ -81,10 +81,11 @@
         }, [event, callApi]);
         
 
-        const reversedDaysToEvent = myarry.graph_data?.days_to_event || [];
-        const getInPrice = myarry.graph_data?.get_in_price || [];
-        const eventSupply = myarry.graph_data?.event_supply || [];
+        const reversedDaysToEvent = (myarry.graph_data?.days_to_event || []).slice().reverse();
+        const getInPrice = (myarry.graph_data?.get_in_price || []).slice().reverse();
+        const eventSupply = (myarry.graph_data?.event_supply || []).slice().reverse();
 
+        console.log(reversedDaysToEvent, 'reversedDaysToEvent');
         const data = {
             labels: reversedDaysToEvent, // X-axis labels (days to event)
             datasets: [
