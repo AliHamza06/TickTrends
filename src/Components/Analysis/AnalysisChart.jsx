@@ -34,31 +34,28 @@
         />
     );
 
-    const AnalysisChart = ({ event,sections,setSections,sectionsapi,quantities,setCallApi,callApi,setSupplyChanges,setPriceChanges}) => {
+    const AnalysisChart = ({ event, sections, setSections, sectionsapi, quantities, setCallApi, callApi, setSupplyChanges, setPriceChanges }) => {
         const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
         const [myarry, setMyarry] = useState({ graph_data: { get_in_price: [], event_supply: [], days_to_event: [] } });
         const [loading, setLoading] = useState(false);
-
+    
         useEffect(() => {
             const handleResize = () => setIsMobile(window.innerWidth <= 768);
             window.addEventListener('resize', handleResize);
             return () => window.removeEventListener('resize', handleResize);
         }, []);
-
+    
         const postEventId = async (eventId) => {
             setLoading(true);
-            console.log(eventId, 'event', sectionsapi, quantities);
             try {
-                // const response = await axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
-                const response = await axios.post('https://api.tictrends.com/api/event-ticket-graph/', {
+                const response = await axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
                     event_id: eventId,
                     ticket_quantity: quantities, // The selected quantities
                     sections: sectionsapi, // The selected sections
                 });
-                
+    
                 if (response) {
-                    console.log(response,'response')
-                    // Updating data from the API response
+                    // Update the state with the new data format
                     setMyarry(response.data);
                     setSections(response.data.available_sections || []);
                     setSupplyChanges(response.data.supply_changes || []);
@@ -71,41 +68,43 @@
                 setCallApi(false); // Reset API call flag
             }
         };
-        
-
+    
         useEffect(() => {
             if (event && event.id && callApi === true) {
-                console.log('we are in update filter',event.id);
                 postEventId(event.id);
             }
         }, [event, callApi]);
-        
-
+    
         const reversedDaysToEvent = (myarry.graph_data?.days_to_event || []).slice().reverse();
         const getInPrice = (myarry.graph_data?.get_in_price || []).slice().reverse();
         const eventSupply = (myarry.graph_data?.event_supply || []).slice().reverse();
-
-        console.log(reversedDaysToEvent, 'reversedDaysToEvent');
+    
+        // Extract price and date for tooltips
+        const getInPriceValues = getInPrice.map(item => item.price);
+        const getInPriceDates = getInPrice.map(item => item.date);
+        const eventSupplyValues = eventSupply.map(item => item.supply);
+        const eventSupplyDates = eventSupply.map(item => item.date);
+    
         const data = {
             labels: reversedDaysToEvent, // X-axis labels (days to event)
             datasets: [
                 {
                     label: 'Get In Price',
-                    data: getInPrice, // Get-in prices for each day
+                    data: getInPriceValues, // Get-in prices for each day
                     borderColor: '#06A4FF',
                     backgroundColor: 'rgba(0, 0, 255, 0.1)',
                     yAxisID: 'y',
                 },
                 {
                     label: 'Event Supply',
-                    data: eventSupply, // Ticket supply for each day
+                    data: eventSupplyValues, // Ticket supply for each day
                     borderColor: '#FA9600',
                     backgroundColor: 'rgba(255, 165, 0, 0.1)',
                     yAxisID: 'y1',
                 },
             ],
         };
-
+    
         const options = {
             responsive: true,
             scales: {
@@ -211,37 +210,39 @@
                 tooltip: {
                     callbacks: {
                         label: function (tooltipItem) {
+                            const index = tooltipItem.dataIndex;
+                            const date = tooltipItem.dataset.label === 'Get In Price' ? getInPriceDates[index] : eventSupplyDates[index];
+                            const value = tooltipItem.raw;
+    
                             if (tooltipItem.dataset.label === 'Get In Price') {
-                                return `$${tooltipItem.raw}`;
+                                return `Price: $${value}, Date: ${date}`;
                             } else {
-                                return `${tooltipItem.raw}`;
+                                return `Supply: ${value}, Date: ${date}`;
                             }
                         }
                     }
                 }
             }
         };
-
+    
         return (
             <div className='analysisChartSection'>
                 <div className='swiftContent'>
                     <h2 className='mb-0'>{event.event_name}</h2>
                     <p>
-                    {new Date(event.date_of_event).toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric', 
-            timeZone: 'UTC' // This ensures the date is displayed in UTC
-        }) || 'N/A'} {' '}
-        at {new Date(event.date_of_event).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }) || 'N/A'}
+                        {new Date(event.date_of_event).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            timeZone: 'UTC' // Ensure the date is displayed in UTC
+                        }) || 'N/A'}{' '}
+                        at {new Date(event.date_of_event).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }) || 'N/A'}
                     </p>
-                        
                     <p>
-                        <span><PinDropIcon /></span> {event.venue?.address || 'Address not available'} {' '} 
-        {event.venue?.city || 'City not available'} {' '} 
-        {event.venue?.state || 'State not available'} {' '} 
-        {event.venue?.zipcode || 'Zipcode not available'}
-                        
+                        <span><PinDropIcon /></span> {event.venue?.address || 'Address not available'}{' '}
+                        {event.venue?.city || 'City not available'}{' '}
+                        {event.venue?.state || 'State not available'}{' '}
+                        {event.venue?.zipcode || 'Zipcode not available'}
                     </p>
                 </div>
                 <div className='chartContainer pt-3'>
@@ -256,5 +257,6 @@
             </div>
         );
     };
-
+    
     export default AnalysisChart;
+    
