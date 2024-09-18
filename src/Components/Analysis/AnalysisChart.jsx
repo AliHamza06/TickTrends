@@ -48,7 +48,7 @@
         const postEventId = async (eventId) => {
             setLoading(true);
             try {
-                const response = await axios.post('http://127.0.0.1:8000/api/event-ticket-graph/', {
+                const response = await axios.post('https://api.tictrends.com/api/event-ticket-graph/', {
                     event_id: eventId,
                     ticket_quantity: quantities, // The selected quantities
                     sections: sectionsapi, // The selected sections

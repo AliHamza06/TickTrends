@@ -31,8 +31,8 @@
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`http://127.0.0.1:8000/api/search-all/?q=${query}`);
-                // const response = await fetch(`https://api.tictrends.com/api/search-all/?q=${query}`);
+                // const response = await fetch(`http://127.0.0.1:8000/api/search-all/?q=${query}`);
+                const response = await fetch(`https://api.tictrends.com/api/search-all/?q=${query}`);
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
